@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Wireframe - Checkout Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #f57c00; /* Warna Itemku (Oranye) */
+            --primary-dark: #e65100;
+            --bg-color: #f5f6f8;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #888888;
+            --border-color: #eeeeee;
+            --radius: 8px;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #dcdcdc;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 100%;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* --- HALAMAN --- */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+            padding-bottom: 70px;
+        }
+        .page-section.active { display: block; }
+
+        /* Kategori Content Container */
+        .category-content { display: none; }
+        .category-content.active { display: block; animation: fadeIn 0.3s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HEADER UMUM --- */
+        .top-header {
+            background-color: var(--card-bg);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .back-btn {
+            margin-right: 15px;
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-placeholder {
+            width: 35px; height: 35px; background-color: var(--primary-color);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 18px;
+        }
+        .app-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+        .page-subtitle { font-size: 11px; color: var(--text-light); }
+
+        .btn-login {
+            margin-left: auto; padding: 6px 15px; border: 1px solid var(--primary-color);
+            border-radius: 20px; color: var(--primary-color); text-decoration: none;
+            font-size: 12px; font-weight: 600;
+        }
+
+        /* --- SEARCH --- */
+        .search-container {
+            padding: 15px; background-color: var(--card-bg); margin-bottom: 10px;
+        }
+        .search-input-wrapper { position: relative; }
+        .search-input {
+            width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px;
+            border: 1px solid #ddd; background-color: #f9f9f9; font-size: 13px;
+        }
+        .search-icon {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #aaa;
+        }
+
+        /* --- BANNER SLIDER --- */
+        .banner-section { margin: 0 0 15px; padding: 0 15px; }
+        .banner-scroll { 
+            display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory;
+            padding-bottom: 10px; scrollbar-width: none; 
+        }
+        .banner-scroll::-webkit-scrollbar { display: none; }
+        .banner-card {
+            min-width: 280px; height: 140px; border-radius: var(--radius); scroll-snap-align: center;
+            display: flex; flex-direction: column; justify-content: center; padding: 15px;
+            color: white; position: relative; overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .banner-roblox { background: linear-gradient(135deg, #3b5998 0%, #192f6a 100%); }
+        .banner-re { background: linear-gradient(135deg, #2c3e50 0%, #000000 100%); }
+        .banner-steam { background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%); }
+        .banner-text h3 { font-size: 16px; font-weight: 800; margin-bottom: 5px; text-transform: uppercase;}
+        .banner-text p { font-size: 12px; margin-bottom: 10px; }
+        .banner-btn {
+            background-color: var(--primary-color); color: white; border: none;
+            padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: bold;
+            width: fit-content; cursor: pointer;
+        }
+
+        /* --- SHARED SECTIONS --- */
+        .section-header {
+            padding: 15px 15px 10px; display: flex; align-items: center; gap: 5px;
+        }
+        .section-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+
+        .tabs-wrapper {
+            padding: 0 15px 15px; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
+        }
+        .tabs-wrapper::-webkit-scrollbar { display: none; }
+        .tab {
+            padding: 8px 16px; background-color: #e0e0e0; border-radius: 15px;
+            font-size: 12px; white-space: nowrap; color: var(--text-main); cursor: pointer;
+        }
+        .tab.active { background-color: var(--primary-color); color: white; }
+
+        .photo-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 15px 20px;
+        }
+        .photo-card {
+            background-color: var(--card-bg); border-radius: var(--radius);
+            overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer;
+        }
+        .photo-placeholder {
+            height: 250px; background-color: #eee; display: flex;
+            align-items: center; justify-content: center; color: #ccc; font-size: 24px;
+        }
+        .photo-info { padding: 10px; }
+        .photo-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+        .photo-desc { font-size: 10px; color: var(--text-light); }
+
+
+        /* --- HALAMAN DETAIL PRODUK --- */
+        .detail-page { padding-bottom: 100px; }
+        .detail-image-container {
+            width: 100%; height: 250px; background-color: #e0e0e0;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; border-bottom: 1px solid #eee;
+        }
+        .detail-image-placeholder { text-align: center; color: #888; }
+        .detail-image-placeholder i { font-size: 50px; margin-bottom: 10px; display: block; }
+
+        .detail-info { padding: 0 20px; }
+        .detail-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
+        .detail-price { font-size: 24px; font-weight: 800; color: var(--primary-color); margin-bottom: 15px; }
+        .detail-row {
+            display: flex; justify-content: space-between; padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0; font-size: 14px;
+        }
+        .detail-label { color: var(--text-light); }
+        .detail-value { font-weight: 600; color: var(--text-main); }
+
+        .detail-footer {
+            position: absolute; bottom: 0; left: 0; width: 100%; background-color: white;
+            padding: 15px; border-top: 1px solid #ddd; display: flex; gap: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .btn-checkout {
+            flex: 1; padding: 12px; background-color: white; border: 1px solid var(--primary-color);
+            color: var(--primary-color); border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer;
+        }
+        .btn-beli {
+            flex: 2; padding: 12px; background-color: var(--primary-color); color: white;
+            border: none; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(245, 124, 0, 0.3);
+        }
+
+        /* ================= HALAMAN CHECKOUT (BARU) ================= */
+        .checkout-container {
+            padding: 15px;
+        }
+
+        .checkout-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .checkout-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        /* Item in Checkout */
+        .checkout-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .checkout-item-img {
+            width: 60px;
+            height: 60px;
+            background-color: #eee;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 20px;
+        }
+        .checkout-item-details {
+            flex: 1;
+        }
+        .checkout-item-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .checkout-item-price {
+            font-size: 13px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Shipping Option */
+        .shipping-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        .ship-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .ship-price {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Summary */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+        .summary-row.total {
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 15px;
+            margin-top: 10px;
+            border-top: 1px dashed #ddd;
+            padding-top: 10px;
+        }
+        .text-green { color: var(--success); }
+
+        /* Payment Method */
+        .payment-method {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .method-label {
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .radio-circle {
+            width: 16px; height: 16px; border: 2px solid var(--primary-color);
+            border-radius: 50%; position: relative;
+        }
+        .radio-circle::after {
+            content: ''; position: absolute; top: 3px; left: 3px; width: 8px; height: 8px;
+            background-color: var(--primary-color); border-radius: 50%;
+        }
+
+        /* Sticky Checkout Footer */
+        .checkout-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 15px;
+            z-index: 1001;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .btn-create-order {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* --- STYLE BARU UNTUK T2 (TRANSAKSI) --- */
+        .transaksi-list { padding: 15px; }
+        
+        .trans-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .trans-card:active { transform: scale(0.98); }
+
+        .trans-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .trans-date { font-size: 11px; color: var(--text-light); }
+        
+        .status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .status-success { background-color: #e8f5e9; color: #2e7d32; } /* Hijau */
+        .status-pending { background-color: #fff3e0; color: #ef6c00; } /* Oranye */
+        .status-failed { background-color: #ffebee; color: #c62828; } /* Merah */
+
+        .trans-body {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .trans-img {
+            width: 50px;
+            height: 50px;
+            background-color: #eee;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .trans-info { flex: 1; }
+        .trans-title { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+        .trans-qty { font-size: 11px; color: var(--text-light); }
+        
+        .trans-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .trans-total-label { font-size: 11px; color: var(--text-light); }
+        .trans-total-price { font-size: 14px; font-weight: 800; color: var(--text-main); }
+
+        /* --- STYLE BARU UNTUK T3 (FAVORIT) --- */
+        .favorit-grid { padding: 15px; }
+        
+        .fav-item {
+            display: flex;
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            align-items: center;
+            gap: 12px;
+        }
+        .fav-img-container {
+            position: relative;
+        }
+        .fav-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 24px;
+        }
+        .fav-icon-heart {
+            position: absolute;
+            bottom: -5px; right: -5px;
+            width: 20px; height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--danger);
+            font-size: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .fav-details { flex: 1; }
+        .fav-title { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+        .fav-price { font-size: 13px; font-weight: 700; color: var(--primary-color); }
+        .fav-action {
+            padding: 8px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* --- OTHER STYLES --- */
+        .profile-header {
+            background-color: var(--primary-color); padding: 30px 20px;
+            display: flex; flex-direction: column; align-items: center; color: white; margin-bottom: 20px;
+        }
+        .avatar-large {
+            width: 80px; height: 80px; background-color: white; border-radius: 50%;
+            margin-bottom: 10px; display: flex; align-items: center; justify-content: center;
+            color: var(--primary-color); font-size: 30px;
+        }
+        .profile-name { font-size: 18px; font-weight: 700; }
+        .profile-email { font-size: 12px; opacity: 0.8; }
+        .menu-list {
+            background-color: var(--card-bg); margin: 0 15px 20px; border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .menu-item {
+            padding: 15px; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0; cursor: pointer;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-left {
+            display: flex; align-items: center; gap: 15px; color: var(--text-main); font-size: 14px;
+        }
+        .menu-icon { width: 24px; text-align: center; color: var(--text-light); }
+        .menu-item.logout .menu-left { color: #e74c3c; }
+
+        .bottom-nav {
+            position: absolute; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color); display: flex; justify-content: space-around;
+            padding: 12px 0 25px 0; z-index: 1000; transition: transform 0.3s;
+        }
+        .bottom-nav.hidden { transform: translateY(100%); }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; text-decoration: none;
+            color: #95a5a6; font-size: 10px; gap: 5px; flex: 1;
+        }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item i { font-size: 18px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container"> 
+        
+        <!-- ================= HALAMAN T1 (BERANDA / HOME) ================= -->
+        <div id="page-home" class="page-section active">
+            <header class="top-header">
+                <div class="logo-area">
+                    <div class="logo-placeholder"><i class="fas fa-gamepad"></i></div>
+                    <div>
+                        <span class="app-name">Home</span><br>
+                        <span class="page-subtitle">logo bisnis</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-login">Masuk</a>
+            </header>
+
+            <!-- Search -->
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Coba cari Game">
+                </div>
+            </div>
+
+            <!-- BANNER SLIDER -->
+            <section class="banner-section">
+    <div class="banner-scroll">
+
+        <!-- 1 -->
+        <div class="banner-card banner-roblox">
+            <div class="banner-text">
+                <h3>Promo produk</h3>
+                <p>Diskon Spesial</p>
+                <button class="banner-btn">Cek Promo</button>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="banner-card banner-re">
+            <div class="banner-text">
+                <h3 style="color:#e74c3c;">Promo produk</h3>
+                <p>Terbatas Hari ini</p>
+                <button class="banner-btn">Belanja</button>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="banner-card banner-steam">
+            <div class="banner-text">
+                <h3>Promo produk</h3>
+                <p>Produk Terbaru</p>
+                <button class="banner-btn">Lihat</button>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="banner-card banner-roblox">
+            <div class="banner-text">
+                <h3>Promo produk</h3>
+                <p>Potongan Hingga 50%</p>
+                <button class="banner-btn">Ambil</button>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="banner-card banner-re">
+            <div class="banner-text">
+                <h3>Promo produk</h3>
+                <p>Khusus Hari Ini</p>
+                <button class="banner-btn">Klaim</button>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="banner-card banner-steam">
+            <div class="banner-text">
+                <h3>Promo produk</h3>
+                <p>Paling Banyak Dibeli</p>
+                <button class="banner-btn">Cek</button>
+            </div>
+        </div>
+
+    </div>
+             </section>
+
+            <!-- Hot Trend -->
+            <div class="section-header">
+                <i class="fas fa-fire" style="color: #e74c3c;"></i>
+                <span class="section-title">Produk/item yang lagi Hot/trend</span>
+            </div>
+
+            <!-- Beli Cepat Tabs (5 Kategori) -->
+            <div class="tabs-wrapper">
+                <div class="tab active" onclick="switchCategory('cat1', this)">Kategori 1</div>
+                <div class="tab" onclick="switchCategory('cat2', this)">Kategori 2</div>
+                <div class="tab" onclick="switchCategory('cat3', this)">Kategori 3</div>
+                <div class="tab" onclick="switchCategory('cat4', this)">Kategori 4</div>
+                <div class="tab" onclick="switchCategory('cat5', this)">Kategori 5</div>
+            </div>
+
+            <!-- === KATEGORI 1 (Produk 1-6) === -->
+            <div id="cat1" class="category-content active">
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openDetail('Produk 1')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 1</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 2')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 2</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 3')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 3</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 4')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 4</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 5')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 5</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 6')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 6</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                </div>
+            </div>
+
+            <!-- === KATEGORI 2 (Produk 1-6) === -->
+            <div id="cat2" class="category-content">
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openDetail('Produk 1')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 1</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 2')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 2</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 3')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 3</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 4')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 4</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 5')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 5</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 6')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 6</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                </div>
+            </div>
+
+            <!-- === KATEGORI 3 (Produk 1-6) === -->
+            <div id="cat3" class="category-content">
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openDetail('Produk 1')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 1</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 2')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 2</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 3')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 3</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 4')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 4</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 5')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 5</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 6')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 6</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                </div>
+            </div>
+
+            <!-- === KATEGORI 4 (Produk 1-6) === -->
+            <div id="cat4" class="category-content">
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openDetail('Produk 1')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 1</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 2')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 2</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 3')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 3</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 4')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 4</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 5')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 5</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 6')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 6</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                </div>
+            </div>
+
+            <!-- === KATEGORI 5 (Produk 1-6) === -->
+            <div id="cat5" class="category-content">
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openDetail('Produk 1')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 1</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 2')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 2</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 3')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 3</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 4')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 4</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 5')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 5</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                    <div class="photo-card" onclick="openDetail('Produk 6')"><div class="photo-placeholder"><i class="fas fa-box"></i></div><div class="photo-info"><div class="photo-title">Produk 6</div><div class="photo-desc">Deskripsi singkat</div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= HALAMAN T2 (TRANSAKSI) ================= -->
+        <div id="page-transaksi" class="page-section">
+            <header class="top-header"><div class="header-title">T2 Transaksi</div></header>
+            
+            <div class="transaksi-list">
+                
+                <!-- Contoh 1: Produk 1 (Berhasil) -->
+                <div class="trans-card" onclick="openDetail('Produk 1')">
+                    <div class="trans-header">
+                        <span class="trans-date">12 Okt 2023, 14:30</span>
+                        <span class="status-badge status-success">Berhasil</span>
+                    </div>
+                    <div class="trans-body">
+                        <div class="trans-img"><i class="fas fa-box"></i></div>
+                        <div class="trans-info">
+                            <div class="trans-title">Produk 1</div>
+                            <div class="trans-qty">Detail transaksi selesai</div>
+                        </div>
+                    </div>
+                    <div class="trans-footer">
+                        <span class="trans-total-label">Total Bayar</span>
+                        <span class="trans-total-price">Rp 20.000</span>
+                    </div>
+                </div>
+
+                <!-- Contoh 2: Produk 2 (Pending) -->
+                <div class="trans-card" onclick="openDetail('Produk 2')">
+                    <div class="trans-header">
+                        <span class="trans-date">10 Okt 2023, 09:15</span>
+                        <span class="status-badge status-pending">Pending</span>
+                    </div>
+                    <div class="trans-body">
+                        <div class="trans-img"><i class="fas fa-box"></i></div>
+                        <div class="trans-info">
+                            <div class="trans-title">Produk 2</div>
+                            <div class="trans-qty">Menunggu Pembayaran</div>
+                        </div>
+                    </div>
+                    <div class="trans-footer">
+                        <span class="trans-total-label">Total Tagihan</span>
+                        <span class="trans-total-price">Rp 68.000</span>
+                    </div>
+                </div>
+
+                <!-- Contoh 3: Produk 3 (Gagal) -->
+                <div class="trans-card" onclick="openDetail('Produk 3')">
+                    <div class="trans-header">
+                        <span class="trans-date">01 Okt 2023, 18:45</span>
+                        <span class="status-badge status-failed">Gagal</span>
+                    </div>
+                    <div class="trans-body">
+                        <div class="trans-img"><i class="fas fa-box"></i></div>
+                        <div class="trans-info">
+                            <div class="trans-title">Produk 3</div>
+                            <div class="trans-qty">Transaksi dibatalkan</div>
+                        </div>
+                    </div>
+                    <div class="trans-footer">
+                        <span class="trans-total-label">Total</span>
+                        <span class="trans-total-price">Rp 55.000</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= HALAMAN T3 (FAVORIT) ================= -->
+        <div id="page-favorit" class="page-section">
+            <header class="top-header"><div class="header-title">T3 Favorit Kamu</div></header>
+            
+            <div class="favorit-grid">
+                
+                <!-- Contoh Favorit 1: Produk 1 -->
+                <div class="fav-item">
+                    <div class="fav-img-container">
+                        <div class="fav-img"><i class="fas fa-box"></i></div>
+                        <div class="fav-icon-heart"><i class="fas fa-heart"></i></div>
+                    </div>
+                    <div class="fav-details">
+                        <div class="fav-title" onclick="openDetail('Produk 1')">Produk 1</div>
+                        <div class="fav-price">Rp 20.000</div>
+                    </div>
+                    <div class="fav-action"><i class="fas fa-trash-alt"></i></div>
+                </div>
+
+                <!-- Contoh Favorit 2: Produk 2 -->
+                <div class="fav-item">
+                    <div class="fav-img-container">
+                        <div class="fav-img"><i class="fas fa-box"></i></div>
+                        <div class="fav-icon-heart"><i class="fas fa-heart"></i></div>
+                    </div>
+                    <div class="fav-details">
+                        <div class="fav-title" onclick="openDetail('Produk 2')">Produk 2</div>
+                        <div class="fav-price">Rp 68.000</div>
+                    </div>
+                    <div class="fav-action"><i class="fas fa-trash-alt"></i></div>
+                </div>
+
+                <!-- Contoh Favorit 3: Produk 3 -->
+                <div class="fav-item">
+                    <div class="fav-img-container">
+                        <div class="fav-img"><i class="fas fa-box"></i></div>
+                        <div class="fav-icon-heart"><i class="fas fa-heart"></i></div>
+                    </div>
+                    <div class="fav-details">
+                        <div class="fav-title" onclick="openDetail('Produk 3')">Produk 3</div>
+                        <div class="fav-price">Rp 55.000</div>
+                    </div>
+                    <div class="fav-action"><i class="fas fa-trash-alt"></i></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= HALAMAN T4 (AKUN) ================= -->
+        <div id="page-akun" class="page-section">
+            <div class="profile-header">
+                <div class="avatar-large"><i class="fas fa-user"></i></div>
+                <div class="profile-name">Nama Pengguna</div>
+                <div class="profile-email">user@email.com</div>
+            </div>
+            <div class="menu-list">
+                <div class="menu-item"><div class="menu-left"><i class="fas fa-user-circle menu-icon"></i><span>Profil Saya</span></div></div>
+                <div class="menu-item"><div class="menu-left"><i class="fas fa-cog menu-icon"></i><span>Pengaturan</span></div></div>
+                <div class="menu-item"><div class="menu-left"><i class="fas fa-headset menu-icon"></i><span>Pusat Bantuan</span></div></div>
+            </div>
+            <div class="menu-list"><div class="menu-item logout"><div class="menu-left"><i class="fas fa-sign-out-alt menu-icon"></i><span>Keluar</span></div></div></div>
+        </div>
+
+        <!-- ================= HALAMAN DETAIL PRODUK ================= -->
+        <div id="page-detail" class="page-section detail-page">
+            <header class="top-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBack()"></i>
+                <div class="header-title">Detail Produk</div>
+            </header>
+            <div class="detail-image-container">
+                <div class="detail-image-placeholder"><i class="fas fa-images"></i><span>GAMBAR PRODUK</span></div>
+            </div>
+            <div class="detail-info">
+                <h2 class="detail-title" id="detail-product-name">Nama Produk</h2>
+                <div class="detail-price">Harga Rp 50.000</div>
+                <div class="detail-row"><span class="detail-label">Stok</span><span class="detail-value">Tersedia</span></div>
+                <div class="detail-row"><span class="detail-label">Penjual</span><span class="detail-value">Toko Resmi</span></div>
+                <div style="margin-top: 20px; color: #666; font-size: 13px; line-height: 1.5;"><p>Deskripsi produk Anda di sini.</p></div>
+            </div>
+            <div class="detail-footer">
+                <button class="btn-checkout">Checkout</button>
+                <button class="btn-beli" onclick="goToCheckout()">BELI</button>
+            </div>
+        </div>
+
+
+        <!-- ================= HALAMAN CHECKOUT (BARU) ================= -->
+        <div id="page-checkout" class="page-section">
+            <header class="top-header">
+                <i class="fas fa-arrow-left back-btn" onclick="goBackFromCheckout()"></i>
+                <div class="header-title">Checkout</div>
+            </header>
+
+            <div class="checkout-container">
+                
+               
+                <div class="checkout-card">
+                    <div class="checkout-title">Alamat Pengiriman</div>
+                    <div style="font-size: 13px; color: #555; line-height: 1.4;">
+                        <strong>Nama Penerima</strong><br>
+                        Jl. Contoh Alamat No. 123, Kecamatan Contoh, Kota Jakarta.<br>
+                        <span style="font-size: 12px; color: #888;">+62 812 3456 7890</span>
+                    </div>
+                </div>
+
+                
+                <div class="checkout-card">
+                    <div class="checkout-title">Produk</div>
+                    <div class="checkout-item">
+                        <div class="checkout-item-img"><i class="fas fa-tshirt"></i></div>
+                        <div class="checkout-item-details">
+                            <div class="checkout-item-name">Kaos Kucing Akmal Ilham Viral - Meme Luc...</div>
+                            <div class="checkout-item-price">Rp 45.767</div>
+                        </div>
+                    </div>
+                </div>
+
+             
+                <div class="checkout-card">
+                    <div class="checkout-title">Pengiriman</div>
+                    <div class="shipping-option">
+                        <div class="ship-name">Reguler</div>
+                        <div class="ship-price">Rp 0</div>
+                    </div>
+                </div>
+
+                <!-- Rincian Pembayaran -->
+                <div class="checkout-card" style="background-color: #fcfcfc;">
+                    <div class="checkout-title">Rincian Pembayaran</div>
+                    <div class="summary-row">
+                        <span>Subtotal (1 produk)</span>
+                        <span>Rp 52.767</span>
+                    </div>
+                    <div class="summary-row text-green">
+                        <span>Diskon</span>
+                        <span>- Rp 5.000</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Bayar</span>
+                        <span style="color: var(--primary-color);">Rp 47.767</span>
+                    </div>
+                </div>
+
+                <!-- Metode Pembayaran -->
+                <div class="checkout-card">
+                    <div class="checkout-title">Metode Pembayaran</div>
+                    <div class="payment-method">
+                        <div class="method-label">
+                            <div class="radio-circle"></div>
+                            <span>COD - Cek Dulu</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tombol Buat Pesanan -->
+            <div class="checkout-footer">
+                <button class="btn-create-order">Buat Pesanan</button>
+            </div>
+        </div>
+
+
+        <!-- ================= BOTTOM NAVIGATION ================= -->
+        <nav class="bottom-nav" id="main-nav">
+            <a href="#" class="nav-item active" onclick="switchPage('home', this)">
+                <i class="fas fa-home"></i><span>Home</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('transaksi', this)">
+                <i class="fas fa-receipt"></i><span>Transaksi</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('favorit', this)">
+                <i class="fas fa-heart"></i><span>Favorit</span>
+            </a>
+            <a href="#" class="nav-item" onclick="switchPage('akun', this)">
+                <i class="fas fa-user"></i><span>Akun</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        function switchPage(pageId, element) {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            document.getElementById('main-nav').classList.remove('hidden');
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            if(element) element.classList.add('active');
+        }
+
+        function switchCategory(catId, element) {
+            const contents = document.querySelectorAll('.category-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(catId).classList.add('active');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            if(element) element.classList.add('active');
+        }
+
+        function openDetail(productName) {
+            document.getElementById('detail-product-name').innerText = productName;
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('page-detail').classList.add('active');
+            document.getElementById('main-nav').classList.add('hidden');
+        }
+
+        function goBack() {
+            document.getElementById('page-detail').classList.remove('active');
+            document.getElementById('page-home').classList.add('active');
+            document.getElementById('main-nav').classList.remove('hidden');
+        }
+
+        // --- FUNGSI BARU CHECKOUT ---
+        function goToCheckout() {
+            // Sembunyikan Detail
+            document.getElementById('page-detail').classList.remove('active');
+            // Tampilkan Checkout
+            document.getElementById('page-checkout').classList.add('active');
+            // Navigasi tetap hidden
+        }
+
+        function goBackFromCheckout() {
+            document.getElementById('page-checkout').classList.remove('active');
+            document.getElementById('page-detail').classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
